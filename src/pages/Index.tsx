@@ -1,11 +1,41 @@
-// Update this page (the content is just a fallback if you fail to update the page)
+import { useState } from "react";
+import { DashboardOverview } from "@/components/DashboardOverview";
+import { StudentManagement } from "@/components/StudentManagement";
+import { TestScoreEntry } from "@/components/TestScoreEntry";
+import { SchoolAnalytics } from "@/components/SchoolAnalytics";
+import { Sidebar } from "@/components/Navigation/Sidebar";
+import { Header } from "@/components/Navigation/Header";
+
+type ActiveView = "dashboard" | "students" | "test-entry" | "analytics";
 
 const Index = () => {
+  const [activeView, setActiveView] = useState<ActiveView>("dashboard");
+
+  const renderContent = () => {
+    switch (activeView) {
+      case "dashboard":
+        return <DashboardOverview />;
+      case "students":
+        return <StudentManagement />;
+      case "test-entry":
+        return <TestScoreEntry />;
+      case "analytics":
+        return <SchoolAnalytics />;
+      default:
+        return <DashboardOverview />;
+    }
+  };
+
   return (
-    <div className="min-h-screen flex items-center justify-center bg-background">
-      <div className="text-center">
-        <h1 className="text-4xl font-bold mb-4">Welcome to Your Blank App</h1>
-        <p className="text-xl text-muted-foreground">Start building your amazing project here!</p>
+    <div className="min-h-screen bg-background">
+      <div className="flex">
+        <Sidebar activeView={activeView} onViewChange={setActiveView} />
+        <div className="flex-1">
+          <Header />
+          <main className="p-6">
+            {renderContent()}
+          </main>
+        </div>
       </div>
     </div>
   );
